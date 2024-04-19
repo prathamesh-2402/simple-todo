@@ -5,7 +5,7 @@ import { Modal } from 'react-responsive-modal';
 import { DataStore } from '@aws-amplify/datastore';
 import { Todos } from '@/models';
 import { useRouter } from "next/navigation";
-import { Trash2 } from 'lucide-react';
+import { LogOut, Plus, Trash2 } from 'lucide-react';
 
 const UserTodo = () => {
     const [open, setOpen] = useState(false);
@@ -84,14 +84,14 @@ const UserTodo = () => {
             <div className='flex justify-between items-center flex-col sm:flex-row gap-6 sm:gap-0'>
                 <h1 className='text-3xl font-bold'>Simple Todo</h1>
                 <div className='flex gap-4'>
-                    <button type="button" className="cursor-pointer py-2 px-4 hover:bg-green-600 bg-[#2f2f31] font-bold text-center rounded text-[#efefef] transition-all" onClick={onOpenModal} >Add New Todo</button>
-                    <button type="button" className="cursor-pointer py-2 px-4 hover:bg-red-600 bg-red-500 font-bold text-center rounded text-[#efefef] transition-all" onClick={logoutUser} >Logout</button>
+                    <button type="button" className="flex items-center gap-2 cursor-pointer py-2 px-4 hover:bg-green-600 bg-[#2f2f31] font-bold text-center rounded text-[#efefef] transition-all" onClick={onOpenModal}><Plus /> Add New Todo</button>
+                    <button type="button" className="flex items-center gap-2 cursor-pointer py-2 px-4 hover:bg-red-600 bg-red-500 font-bold text-center rounded text-[#efefef] transition-all" onClick={logoutUser}><LogOut /> Logout</button>
                 </div>
             </div>
             <div className='mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4'>
                 {allTodos?.map((todo: any) => (
                     <div className='border-4 border-green-600 text-green-800 bg-[rgba(22,163,74,0.10)] p-4 rounded-md flex flex-col gap-4' key={todo.id}>
-                        <div className='flex justify-between'>
+                        <div className='flex justify-between gap-2'>
                             <h1 className='text-3xl font-bold'>{todo.title}</h1>
                             <Trash2 className='cursor-pointer text-red-500 hover:scale-110 transition-all' onClick={() => deleteTodo(todo)} />
                         </div>
