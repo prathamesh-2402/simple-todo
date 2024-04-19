@@ -81,16 +81,16 @@ const UserTodo = () => {
                     <button type="button" className="cursor-pointer py-2 px-4 my-4 block bg-[#18181b] hover:bg-[#2f2f31] font-bold w-full text-center rounded text-[#efefef] transition-all" onClick={addTodo}>Add Todo</button>
                 </div>
             </Modal>
-            <div className='flex justify-between items-center'>
+            <div className='flex justify-between items-center flex-col sm:flex-row gap-6 sm:gap-0'>
                 <h1 className='text-3xl font-bold'>Simple Todo</h1>
                 <div className='flex gap-4'>
                     <button type="button" className="cursor-pointer py-2 px-4 hover:bg-green-600 bg-[#2f2f31] font-bold text-center rounded text-[#efefef] transition-all" onClick={onOpenModal} >Add New Todo</button>
                     <button type="button" className="cursor-pointer py-2 px-4 hover:bg-red-600 bg-red-500 font-bold text-center rounded text-[#efefef] transition-all" onClick={logoutUser} >Logout</button>
                 </div>
             </div>
-            <div className='mt-10 flex gap-4'>
+            <div className='mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4'>
                 {allTodos?.map((todo: any) => (
-                    <div className='w-[20%] border-4 border-green-600 text-green-800 bg-[rgba(22,163,74,0.10)] p-4 rounded-md flex flex-col gap-4' key={todo.id}>
+                    <div className='border-4 border-green-600 text-green-800 bg-[rgba(22,163,74,0.10)] p-4 rounded-md flex flex-col gap-4' key={todo.id}>
                         <div className='flex justify-between'>
                             <h1 className='text-3xl font-bold'>{todo.title}</h1>
                             <Trash2 className='cursor-pointer text-red-500 hover:scale-110 transition-all' onClick={() => deleteTodo(todo)} />

@@ -14,10 +14,14 @@ export const onCreateUser = /* GraphQL */ `subscription OnCreateUser($filter: Mo
     username
     todoss {
       nextToken
+      startedAt
       __typename
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     __typename
   }
 }
@@ -31,10 +35,14 @@ export const onUpdateUser = /* GraphQL */ `subscription OnUpdateUser($filter: Mo
     username
     todoss {
       nextToken
+      startedAt
       __typename
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     __typename
   }
 }
@@ -48,10 +56,14 @@ export const onDeleteUser = /* GraphQL */ `subscription OnDeleteUser($filter: Mo
     username
     todoss {
       nextToken
+      startedAt
       __typename
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     __typename
   }
 }
@@ -64,13 +76,17 @@ export const onCreateTodos = /* GraphQL */ `subscription OnCreateTodos($filter: 
     id
     title
     description
-    createdAt
-    updatedAt
     userId
     Users {
       nextToken
+      startedAt
       __typename
     }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     __typename
   }
 }
@@ -83,13 +99,17 @@ export const onUpdateTodos = /* GraphQL */ `subscription OnUpdateTodos($filter: 
     id
     title
     description
-    createdAt
-    updatedAt
     userId
     Users {
       nextToken
+      startedAt
       __typename
     }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     __typename
   }
 }
@@ -102,13 +122,17 @@ export const onDeleteTodos = /* GraphQL */ `subscription OnDeleteTodos($filter: 
     id
     title
     description
-    createdAt
-    updatedAt
     userId
     Users {
       nextToken
+      startedAt
       __typename
     }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     __typename
   }
 }
@@ -126,19 +150,28 @@ export const onCreateTodosUser = /* GraphQL */ `subscription OnCreateTodosUser($
       username
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       __typename
     }
     todos {
       id
       title
       description
+      userId
       createdAt
       updatedAt
-      userId
+      _version
+      _deleted
+      _lastChangedAt
       __typename
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     __typename
   }
 }
@@ -156,19 +189,28 @@ export const onUpdateTodosUser = /* GraphQL */ `subscription OnUpdateTodosUser($
       username
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       __typename
     }
     todos {
       id
       title
       description
+      userId
       createdAt
       updatedAt
-      userId
+      _version
+      _deleted
+      _lastChangedAt
       __typename
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     __typename
   }
 }
@@ -186,19 +228,28 @@ export const onDeleteTodosUser = /* GraphQL */ `subscription OnDeleteTodosUser($
       username
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       __typename
     }
     todos {
       id
       title
       description
+      userId
       createdAt
       updatedAt
-      userId
+      _version
+      _deleted
+      _lastChangedAt
       __typename
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     __typename
   }
 }

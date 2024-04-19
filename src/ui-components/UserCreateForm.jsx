@@ -7,10 +7,9 @@
 /* eslint-disable */
 import * as React from "react";
 import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
+import { User } from "../models";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
-import { generateClient } from "aws-amplify/api";
-import { createUser } from "../graphql/mutations";
-const client = generateClient();
+import { DataStore } from "aws-amplify/datastore";
 export default function UserCreateForm(props) {
   const {
     clearOnSuccess = true,
@@ -24,15 +23,23 @@ export default function UserCreateForm(props) {
   } = props;
   const initialValues = {
     username: "",
+    createdAt: "",
+    updatedAt: "",
   };
   const [username, setUsername] = React.useState(initialValues.username);
+  const [createdAt, setCreatedAt] = React.useState(initialValues.createdAt);
+  const [updatedAt, setUpdatedAt] = React.useState(initialValues.updatedAt);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setUsername(initialValues.username);
+    setCreatedAt(initialValues.createdAt);
+    setUpdatedAt(initialValues.updatedAt);
     setErrors({});
   };
   const validations = {
     username: [],
+    createdAt: [],
+    updatedAt: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -51,6 +58,23 @@ export default function UserCreateForm(props) {
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
   };
+  const convertToLocal = (date) => {
+    const df = new Intl.DateTimeFormat("default", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      calendar: "iso8601",
+      numberingSystem: "latn",
+      hourCycle: "h23",
+    });
+    const parts = df.formatToParts(date).reduce((acc, part) => {
+      acc[part.type] = part.value;
+      return acc;
+    }, {});
+    return `${parts.year}-${parts.month}-${parts.day}T${parts.hour}:${parts.minute}`;
+  };
   return (
     <Grid
       as="form"
@@ -61,6 +85,8 @@ export default function UserCreateForm(props) {
         event.preventDefault();
         let modelFields = {
           username,
+          createdAt,
+          updatedAt,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -90,14 +116,7 @@ export default function UserCreateForm(props) {
               modelFields[key] = null;
             }
           });
-          await client.graphql({
-            query: createUser.replaceAll("__typename", ""),
-            variables: {
-              input: {
-                ...modelFields,
-              },
-            },
-          });
+          await DataStore.save(new User(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);
           }
@@ -106,8 +125,7 @@ export default function UserCreateForm(props) {
           }
         } catch (err) {
           if (onError) {
-            const messages = err.errors.map((e) => e.message).join("\n");
-            onError(modelFields, messages);
+            onError(modelFields, err.message);
           }
         }
       }}
@@ -124,6 +142,8 @@ export default function UserCreateForm(props) {
           if (onChange) {
             const modelFields = {
               username: value,
+              createdAt,
+              updatedAt,
             };
             const result = onChange(modelFields);
             value = result?.username ?? value;
@@ -137,6 +157,62 @@ export default function UserCreateForm(props) {
         errorMessage={errors.username?.errorMessage}
         hasError={errors.username?.hasError}
         {...getOverrideProps(overrides, "username")}
+      ></TextField>
+      <TextField
+        label="Created at"
+        isRequired={false}
+        isReadOnly={false}
+        type="datetime-local"
+        value={createdAt && convertToLocal(new Date(createdAt))}
+        onChange={(e) => {
+          let value =
+            e.target.value === "" ? "" : new Date(e.target.value).toISOString();
+          if (onChange) {
+            const modelFields = {
+              username,
+              createdAt: value,
+              updatedAt,
+            };
+            const result = onChange(modelFields);
+            value = result?.createdAt ?? value;
+          }
+          if (errors.createdAt?.hasError) {
+            runValidationTasks("createdAt", value);
+          }
+          setCreatedAt(value);
+        }}
+        onBlur={() => runValidationTasks("createdAt", createdAt)}
+        errorMessage={errors.createdAt?.errorMessage}
+        hasError={errors.createdAt?.hasError}
+        {...getOverrideProps(overrides, "createdAt")}
+      ></TextField>
+      <TextField
+        label="Updated at"
+        isRequired={false}
+        isReadOnly={false}
+        type="datetime-local"
+        value={updatedAt && convertToLocal(new Date(updatedAt))}
+        onChange={(e) => {
+          let value =
+            e.target.value === "" ? "" : new Date(e.target.value).toISOString();
+          if (onChange) {
+            const modelFields = {
+              username,
+              createdAt,
+              updatedAt: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.updatedAt ?? value;
+          }
+          if (errors.updatedAt?.hasError) {
+            runValidationTasks("updatedAt", value);
+          }
+          setUpdatedAt(value);
+        }}
+        onBlur={() => runValidationTasks("updatedAt", updatedAt)}
+        errorMessage={errors.updatedAt?.errorMessage}
+        hasError={errors.updatedAt?.hasError}
+        {...getOverrideProps(overrides, "updatedAt")}
       ></TextField>
       <Flex
         justifyContent="space-between"

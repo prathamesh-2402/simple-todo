@@ -78,7 +78,7 @@ export default function Home() {
 
   return (
     <div
-      className={`flex min-h-full items-center justify-center p-24 ${inter.className}`}
+      className={`flex min-h-full items-center justify-center p-2 sm:p-24 ${inter.className}`}
     >
       <div className={`max-w-xl py-6 px-8 mt-20 border border-[#e4e4e7] rounded shadow-md ${newUser ? 'hidden' : ''}`}>
         <h1 className="text-2xl font-bold mb-4">Login User</h1>

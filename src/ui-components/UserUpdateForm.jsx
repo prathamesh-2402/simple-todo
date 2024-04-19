@@ -7,11 +7,9 @@
 /* eslint-disable */
 import * as React from "react";
 import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
+import { User } from "../models";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
-import { generateClient } from "aws-amplify/api";
-import { getUser } from "../graphql/queries";
-import { updateUser } from "../graphql/mutations";
-const client = generateClient();
+import { DataStore } from "aws-amplify/datastore";
 export default function UserUpdateForm(props) {
   const {
     id: idProp,
@@ -26,26 +24,27 @@ export default function UserUpdateForm(props) {
   } = props;
   const initialValues = {
     username: "",
+    createdAt: "",
+    updatedAt: "",
   };
   const [username, setUsername] = React.useState(initialValues.username);
+  const [createdAt, setCreatedAt] = React.useState(initialValues.createdAt);
+  const [updatedAt, setUpdatedAt] = React.useState(initialValues.updatedAt);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = userRecord
       ? { ...initialValues, ...userRecord }
       : initialValues;
     setUsername(cleanValues.username);
+    setCreatedAt(cleanValues.createdAt);
+    setUpdatedAt(cleanValues.updatedAt);
     setErrors({});
   };
   const [userRecord, setUserRecord] = React.useState(userModelProp);
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp
-        ? (
-            await client.graphql({
-              query: getUser.replaceAll("__typename", ""),
-              variables: { id: idProp },
-            })
-          )?.data?.getUser
+        ? await DataStore.query(User, idProp)
         : userModelProp;
       setUserRecord(record);
     };
@@ -54,6 +53,8 @@ export default function UserUpdateForm(props) {
   React.useEffect(resetStateValues, [userRecord]);
   const validations = {
     username: [],
+    createdAt: [],
+    updatedAt: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -72,6 +73,23 @@ export default function UserUpdateForm(props) {
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
   };
+  const convertToLocal = (date) => {
+    const df = new Intl.DateTimeFormat("default", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      calendar: "iso8601",
+      numberingSystem: "latn",
+      hourCycle: "h23",
+    });
+    const parts = df.formatToParts(date).reduce((acc, part) => {
+      acc[part.type] = part.value;
+      return acc;
+    }, {});
+    return `${parts.year}-${parts.month}-${parts.day}T${parts.hour}:${parts.minute}`;
+  };
   return (
     <Grid
       as="form"
@@ -81,7 +99,9 @@ export default function UserUpdateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          username: username ?? null,
+          username,
+          createdAt,
+          updatedAt,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -111,22 +131,17 @@ export default function UserUpdateForm(props) {
               modelFields[key] = null;
             }
           });
-          await client.graphql({
-            query: updateUser.replaceAll("__typename", ""),
-            variables: {
-              input: {
-                id: userRecord.id,
-                ...modelFields,
-              },
-            },
-          });
+          await DataStore.save(
+            User.copyOf(userRecord, (updated) => {
+              Object.assign(updated, modelFields);
+            })
+          );
           if (onSuccess) {
             onSuccess(modelFields);
           }
         } catch (err) {
           if (onError) {
-            const messages = err.errors.map((e) => e.message).join("\n");
-            onError(modelFields, messages);
+            onError(modelFields, err.message);
           }
         }
       }}
@@ -143,6 +158,8 @@ export default function UserUpdateForm(props) {
           if (onChange) {
             const modelFields = {
               username: value,
+              createdAt,
+              updatedAt,
             };
             const result = onChange(modelFields);
             value = result?.username ?? value;
@@ -156,6 +173,62 @@ export default function UserUpdateForm(props) {
         errorMessage={errors.username?.errorMessage}
         hasError={errors.username?.hasError}
         {...getOverrideProps(overrides, "username")}
+      ></TextField>
+      <TextField
+        label="Created at"
+        isRequired={false}
+        isReadOnly={false}
+        type="datetime-local"
+        value={createdAt && convertToLocal(new Date(createdAt))}
+        onChange={(e) => {
+          let value =
+            e.target.value === "" ? "" : new Date(e.target.value).toISOString();
+          if (onChange) {
+            const modelFields = {
+              username,
+              createdAt: value,
+              updatedAt,
+            };
+            const result = onChange(modelFields);
+            value = result?.createdAt ?? value;
+          }
+          if (errors.createdAt?.hasError) {
+            runValidationTasks("createdAt", value);
+          }
+          setCreatedAt(value);
+        }}
+        onBlur={() => runValidationTasks("createdAt", createdAt)}
+        errorMessage={errors.createdAt?.errorMessage}
+        hasError={errors.createdAt?.hasError}
+        {...getOverrideProps(overrides, "createdAt")}
+      ></TextField>
+      <TextField
+        label="Updated at"
+        isRequired={false}
+        isReadOnly={false}
+        type="datetime-local"
+        value={updatedAt && convertToLocal(new Date(updatedAt))}
+        onChange={(e) => {
+          let value =
+            e.target.value === "" ? "" : new Date(e.target.value).toISOString();
+          if (onChange) {
+            const modelFields = {
+              username,
+              createdAt,
+              updatedAt: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.updatedAt ?? value;
+          }
+          if (errors.updatedAt?.hasError) {
+            runValidationTasks("updatedAt", value);
+          }
+          setUpdatedAt(value);
+        }}
+        onBlur={() => runValidationTasks("updatedAt", updatedAt)}
+        errorMessage={errors.updatedAt?.errorMessage}
+        hasError={errors.updatedAt?.hasError}
+        {...getOverrideProps(overrides, "updatedAt")}
       ></TextField>
       <Flex
         justifyContent="space-between"

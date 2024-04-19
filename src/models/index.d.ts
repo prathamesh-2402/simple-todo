@@ -9,7 +9,6 @@ import { LazyLoading, LazyLoadingDisabled, AsyncCollection, AsyncItem } from "@a
 type EagerUser = {
   readonly [__modelMeta__]: {
     identifier: ManagedIdentifier<User, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
   readonly username?: string | null;
@@ -21,7 +20,6 @@ type EagerUser = {
 type LazyUser = {
   readonly [__modelMeta__]: {
     identifier: ManagedIdentifier<User, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
   readonly username?: string | null;
@@ -39,7 +37,6 @@ export declare const User: (new (init: ModelInit<User>) => User) & {
 type EagerTodos = {
   readonly [__modelMeta__]: {
     identifier: ManagedIdentifier<Todos, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
   readonly title?: string | null;
@@ -53,7 +50,6 @@ type EagerTodos = {
 type LazyTodos = {
   readonly [__modelMeta__]: {
     identifier: ManagedIdentifier<Todos, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
   readonly title?: string | null;

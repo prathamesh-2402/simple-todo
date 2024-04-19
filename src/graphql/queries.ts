@@ -14,10 +14,14 @@ export const getUser = /* GraphQL */ `query GetUser($id: ID!) {
     username
     todoss {
       nextToken
+      startedAt
       __typename
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     __typename
   }
 }
@@ -33,25 +37,61 @@ export const listUsers = /* GraphQL */ `query ListUsers(
       username
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       __typename
     }
     nextToken
+    startedAt
     __typename
   }
 }
 ` as GeneratedQuery<APITypes.ListUsersQueryVariables, APITypes.ListUsersQuery>;
+export const syncUsers = /* GraphQL */ `query SyncUsers(
+  $filter: ModelUserFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncUsers(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    lastSync: $lastSync
+  ) {
+    items {
+      id
+      username
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<APITypes.SyncUsersQueryVariables, APITypes.SyncUsersQuery>;
 export const getTodos = /* GraphQL */ `query GetTodos($id: ID!) {
   getTodos(id: $id) {
     id
     title
     description
-    createdAt
-    updatedAt
     userId
     Users {
       nextToken
+      startedAt
       __typename
     }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     __typename
   }
 }
@@ -66,16 +106,50 @@ export const listTodos = /* GraphQL */ `query ListTodos(
       id
       title
       description
+      userId
       createdAt
       updatedAt
-      userId
+      _version
+      _deleted
+      _lastChangedAt
       __typename
     }
     nextToken
+    startedAt
     __typename
   }
 }
 ` as GeneratedQuery<APITypes.ListTodosQueryVariables, APITypes.ListTodosQuery>;
+export const syncTodos = /* GraphQL */ `query SyncTodos(
+  $filter: ModelTodosFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncTodos(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    lastSync: $lastSync
+  ) {
+    items {
+      id
+      title
+      description
+      userId
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<APITypes.SyncTodosQueryVariables, APITypes.SyncTodosQuery>;
 export const getTodosUser = /* GraphQL */ `query GetTodosUser($id: ID!) {
   getTodosUser(id: $id) {
     id
@@ -86,19 +160,28 @@ export const getTodosUser = /* GraphQL */ `query GetTodosUser($id: ID!) {
       username
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       __typename
     }
     todos {
       id
       title
       description
+      userId
       createdAt
       updatedAt
-      userId
+      _version
+      _deleted
+      _lastChangedAt
       __typename
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     __typename
   }
 }
@@ -118,15 +201,51 @@ export const listTodosUsers = /* GraphQL */ `query ListTodosUsers(
       todosId
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       __typename
     }
     nextToken
+    startedAt
     __typename
   }
 }
 ` as GeneratedQuery<
   APITypes.ListTodosUsersQueryVariables,
   APITypes.ListTodosUsersQuery
+>;
+export const syncTodosUsers = /* GraphQL */ `query SyncTodosUsers(
+  $filter: ModelTodosUserFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncTodosUsers(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    lastSync: $lastSync
+  ) {
+    items {
+      id
+      userId
+      todosId
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.SyncTodosUsersQueryVariables,
+  APITypes.SyncTodosUsersQuery
 >;
 export const todosUsersByUserId = /* GraphQL */ `query TodosUsersByUserId(
   $userId: ID!
@@ -148,9 +267,13 @@ export const todosUsersByUserId = /* GraphQL */ `query TodosUsersByUserId(
       todosId
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       __typename
     }
     nextToken
+    startedAt
     __typename
   }
 }
@@ -178,9 +301,13 @@ export const todosUsersByTodosId = /* GraphQL */ `query TodosUsersByTodosId(
       todosId
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       __typename
     }
     nextToken
+    startedAt
     __typename
   }
 }

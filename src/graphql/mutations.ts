@@ -17,10 +17,14 @@ export const createUser = /* GraphQL */ `mutation CreateUser(
     username
     todoss {
       nextToken
+      startedAt
       __typename
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     __typename
   }
 }
@@ -37,10 +41,14 @@ export const updateUser = /* GraphQL */ `mutation UpdateUser(
     username
     todoss {
       nextToken
+      startedAt
       __typename
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     __typename
   }
 }
@@ -57,10 +65,14 @@ export const deleteUser = /* GraphQL */ `mutation DeleteUser(
     username
     todoss {
       nextToken
+      startedAt
       __typename
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     __typename
   }
 }
@@ -76,13 +88,17 @@ export const createTodos = /* GraphQL */ `mutation CreateTodos(
     id
     title
     description
-    createdAt
-    updatedAt
     userId
     Users {
       nextToken
+      startedAt
       __typename
     }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     __typename
   }
 }
@@ -98,13 +114,17 @@ export const updateTodos = /* GraphQL */ `mutation UpdateTodos(
     id
     title
     description
-    createdAt
-    updatedAt
     userId
     Users {
       nextToken
+      startedAt
       __typename
     }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     __typename
   }
 }
@@ -120,13 +140,17 @@ export const deleteTodos = /* GraphQL */ `mutation DeleteTodos(
     id
     title
     description
-    createdAt
-    updatedAt
     userId
     Users {
       nextToken
+      startedAt
       __typename
     }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     __typename
   }
 }
@@ -147,19 +171,28 @@ export const createTodosUser = /* GraphQL */ `mutation CreateTodosUser(
       username
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       __typename
     }
     todos {
       id
       title
       description
+      userId
       createdAt
       updatedAt
-      userId
+      _version
+      _deleted
+      _lastChangedAt
       __typename
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     __typename
   }
 }
@@ -180,19 +213,28 @@ export const updateTodosUser = /* GraphQL */ `mutation UpdateTodosUser(
       username
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       __typename
     }
     todos {
       id
       title
       description
+      userId
       createdAt
       updatedAt
-      userId
+      _version
+      _deleted
+      _lastChangedAt
       __typename
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     __typename
   }
 }
@@ -213,19 +255,28 @@ export const deleteTodosUser = /* GraphQL */ `mutation DeleteTodosUser(
       username
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       __typename
     }
     todos {
       id
       title
       description
+      userId
       createdAt
       updatedAt
-      userId
+      _version
+      _deleted
+      _lastChangedAt
       __typename
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
     __typename
   }
 }
