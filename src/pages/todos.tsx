@@ -17,6 +17,9 @@ const UserTodo = () => {
     const onCloseModal = () => setOpen(false);
 
     useEffect(() => {
+        if(localStorage.getItem("id") === null){
+            router.push('/');
+        }
         getTodo();
     }, [])
 
